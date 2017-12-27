@@ -181,4 +181,6 @@ public:
     virtual CSE_ALifeItemPDA* cast_item_pda() { return 0; };
 };
 
+extern u16 script_server_object_version();
+
 #pragma warning(pop)

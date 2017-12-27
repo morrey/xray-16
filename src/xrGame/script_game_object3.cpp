@@ -753,19 +753,30 @@ void CScriptGameObject::set_sight(SightManager::ESightType sight_type, bool tors
 
 void CScriptGameObject::set_sight(SightManager::ESightType sight_type, Fvector& vector3d, bool torso_look = false)
 {
-    CAI_Stalker* stalker = smart_cast<CAI_Stalker*>(&object());
-    if (!stalker)
-        ai().script_engine().script_log(LuaMessageType::Error, "CSightManager : cannot access class member set_sight!");
-    else
-    {
-        if ((sight_type == SightManager::eSightTypeDirection) && (_abs(vector3d.magnitude() - 1.f) > .01f))
-        {
-            VERIFY2(false, make_string("non-normalized direction passed [%f][%f][%f]", VPUSH(vector3d)));
-            vector3d.normalize();
-        }
+	/*CAI_Stalker* stalker = smart_cast<CAI_Stalker*>(&object());
+	if (!stalker)
+	ai().script_engine().script_log(LuaMessageType::Error, "CSightManager : cannot access class member set_sight!");
+	else
+	{
+	if ((sight_type == SightManager::eSightTypeDirection) && (_abs(vector3d.magnitude() - 1.f) > .01f))
+	{
+	//VERIFY2(false, make_string("non-normalized direction passed [%f][%f][%f]", VPUSH(vector3d)));
+	Msg("- non-normalized direction passed [%f][%f][%f]", VPUSH(vector3d));
+	vector3d.normalize();
+	}
 
-        stalker->sight().setup(sight_type, vector3d, torso_look);
-    }
+	stalker->sight().setup(sight_type, vector3d, torso_look);
+	}*/
+
+	//morrey 
+	// не работала чн-кая анимация 
+	CAI_Stalker					*stalker = smart_cast<CAI_Stalker*>(&object());
+
+	if (!stalker)
+		ai().script_engine().script_log(LuaMessageType::Error, "CSightManager : cannot access class member set_sight!");
+	else
+		stalker->sight().setup(sight_type, vector3d, torso_look);
+	//morrey 
 }
 
 void CScriptGameObject::set_sight(SightManager::ESightType sight_type, Fvector* vector3d)

@@ -41,24 +41,36 @@ cover::cover(smart_cover::object const& object, DescriptionPtr description, bool
 {
     m_is_smart_cover = 1;
 
-    m_loopholes.reserve(m_description->loopholes().size());
-    Loopholes::const_iterator I = m_description->loopholes().begin();
-    Loopholes::const_iterator E = m_description->loopholes().end();
-    for (; I != E; ++I)
-    {
-        for (luabind::iterator i(loopholes_availability), e; i != e; ++i)
-        {
-            LPCSTR const loophole_id = luabind::object_cast<LPCSTR>(i.key());
-            if (xr_strcmp(loophole_id, (*I)->id()))
-                continue;
+	if (loopholes_availability)
+	{
+		m_loopholes.reserve(m_description->loopholes().size());
+		Loopholes::const_iterator I = m_description->loopholes().begin();
+		Loopholes::const_iterator E = m_description->loopholes().end();
+		for (; I != E; ++I)
+		{
+			for (luabind::iterator i(loopholes_availability), e; i != e; ++i)
+			{
+				LPCSTR const loophole_id = luabind::object_cast<LPCSTR>(i.key());
+				if (xr_strcmp(loophole_id, (*I)->id()))
+					continue;
 
-            if (!luabind::object_cast<bool>(*i))
-                break;
+				if (!luabind::object_cast<bool>(*i))
+					break;
 
-            m_loopholes.push_back(*I);
-            break;
-        }
-    }
+				m_loopholes.push_back(*I);
+				break;
+			}
+		}
+	}
+	else
+	{
+		m_loopholes.reserve(m_description->loopholes().size());
+		Loopholes::const_iterator I = m_description->loopholes().begin();
+		Loopholes::const_iterator E = m_description->loopholes().end();
+		
+		for (; I != E; ++I) m_loopholes.push_back(*I);
+		
+	}
 
     CLevelGraph const& graph = ai().level_graph();
     m_vertices.resize(loopholes().size());

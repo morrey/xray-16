@@ -77,4 +77,5 @@ IC void stalker_movement_params::cover_fire_position(Fvector const* position)
 }
 
 IC Fvector const* stalker_movement_params::cover_fire_position() const { return (m_cover_fire_position); }
+
 #endif // #ifndef STALKER_MOVEMENT_PARAMS_INLINE_H_INCLUDED

@@ -173,132 +173,248 @@ void stalker_movement_manager_smart_cover::modify_animation(CBlend* blend)
 
 bool show_restrictions(CRestrictedObject* object);
 
+//morrey 
+// смарткаверы чн-ные не работали. заюзал из чн алгоритм 
+//void stalker_movement_manager_smart_cover::reach_enter_location(u32 const& time_delta)
+//{
+//    m_current.m_path_type = MovementManager::ePathTypeLevelPath;
+//    m_current.m_detail_path_type = DetailPathManager::eDetailPathTypeSmooth;
+//
+//    m_current.m_mental_state = m_target.m_mental_state;
+//    m_current.m_body_state = m_target.m_body_state;
+//    m_current.m_movement_type = m_target.m_movement_type;
+//
+//    VERIFY(m_target.cover());
+//
+//    smart_cover::loophole const& target_loophole = *m_target.cover_loophole();
+//    smart_cover::loophole const& loophole =
+//        target_loophole.enterable() ? target_loophole : nearest_enterable_loophole();
+//
+//    Fvector position;
+//    m_target.cover()->object().XFORM().transform_tiny(position, current_transition().animation().position());
+//
+//    u32 level_vertex_id = ai().level_graph().vertex(u32(-1), position);
+//    if (!accessible(level_vertex_id) || !accessible(position))
+//    {
+//        if (!ai().level_graph().inside(level_vertex_id, position))
+//            position = ai().level_graph().vertex_position(level_vertex_id);
+//        else
+//            position.y = ai().level_graph().vertex_plane_y(level_vertex_id, position.x, position.z);
+//
+//        if (!restrictions().accessible(position))
+//        {
+//            level_vertex_id = restrictions().accessible_nearest(Fvector().set(position), position);
+//            VERIFY(restrictions().accessible(level_vertex_id));
+//            VERIFY(restrictions().accessible(position));
+//        }
+//        else
+//        {
+//            if (!restrictions().accessible(level_vertex_id))
+//            {
+//                level_vertex_id =
+//                    restrictions().accessible_nearest(ai().level_graph().vertex_position(level_vertex_id), position);
+//                VERIFY(restrictions().accessible(level_vertex_id));
+//                VERIFY(restrictions().accessible(position));
+//            }
+//        }
+//
+//        VERIFY(ai().level_graph().inside(level_vertex_id, position));
+//
+//        VERIFY2(restrictions().accessible(level_vertex_id) || show_restrictions(&restrictions()), *object().cName());
+//        CMovementManager::set_level_dest_vertex(level_vertex_id);
+//
+//        VERIFY2(restrictions().accessible(position) || show_restrictions(&restrictions()), *object().cName());
+//        m_current.desired_position(&position);
+//    }
+//    else
+//    {
+//        CMovementManager::set_level_dest_vertex(level_vertex_id);
+//        m_current.desired_position(&position);
+//    }
+//
+//    Fvector direction = m_target.cover()->enter_direction(loophole);
+//    m_current.desired_direction(&direction);
+//
+//    if (target_approached(m_apply_loophole_direction_distance))
+//        object().sight().setup(CSightAction(SightManager::eSightTypeDirection, direction, true));
+//
+//    inherited::update(m_current);
+//
+//    if (!path_completed())
+//        return;
+//
+//    if (!object().sight().current_action().target_reached())
+//        return;
+//
+//    if (target_params().cover()->can_fire())
+//    {
+//        CInventoryItem const* const inventory_item = object().inventory().ActiveItem();
+//        if (!inventory_item)
+//        {
+//            if (!object().CObjectHandler::goal_reached())
+//                return;
+//
+//            object().set_goal(MonsterSpace::eObjectActionIdle, object().best_weapon());
+//            return;
+//        }
+//
+//        if (inventory_item->BaseSlot() != INV_SLOT_3)
+//        {
+//            if (!object().CObjectHandler::goal_reached())
+//                return;
+//
+//            object().set_goal(MonsterSpace::eObjectActionIdle, object().best_weapon());
+//            return;
+//        }
+//    }
+//
+//    object().animation().global().target_matrix(position, direction);
+//
+//    if (!current_transition().animation().has_animation())
+//    {
+//        enter_smart_cover();
+//        return;
+//    }
+//
+//    object().sight().setup(CSightAction(SightManager::eSightTypeAnimationDirection, true, false));
+//
+//    on_smart_cover_enter();
+//
+//    m_entering_smart_cover_with_animation = true;
+//
+//    m_enter_cover_id = m_target.cover_id();
+//    m_enter_loophole_id = m_target.cover_loophole_id();
+//    VERIFY(m_enter_cover_id != "");
+//    VERIFY(m_enter_loophole_id != "");
+//
+//    m_enter_animation =
+//        smart_cast<IKinematicsAnimated*>(object().Visual())->ID_Cycle(current_transition().animation().animation_id());
+//
+//    CStalkerAnimationManager& animation = object().animation();
+//
+//    animation.global_selector(
+//        CStalkerAnimationManager::AnimationSelector(this, &stalker_movement_manager_smart_cover::select_animation));
+//    animation.global_callback(
+//        CStalkerAnimationManager::AnimationCallback(this, &stalker_movement_manager_smart_cover::on_animation_end));
+//#ifdef DEBUG
+//    animation.global_modifier(
+//        CStalkerAnimationManager::AnimationModifier(this, &stalker_movement_manager_smart_cover::modify_animation));
+//#endif // #ifdef DEBUG
+//}
+
 void stalker_movement_manager_smart_cover::reach_enter_location(u32 const& time_delta)
 {
-    m_current.m_path_type = MovementManager::ePathTypeLevelPath;
-    m_current.m_detail_path_type = DetailPathManager::eDetailPathTypeSmooth;
+	m_current.m_path_type = MovementManager::ePathTypeLevelPath;
+	m_current.m_detail_path_type = DetailPathManager::eDetailPathTypeSmooth;
 
-    m_current.m_mental_state = m_target.m_mental_state;
-    m_current.m_body_state = m_target.m_body_state;
-    m_current.m_movement_type = m_target.m_movement_type;
+	m_current.m_mental_state = m_target.m_mental_state;
+	m_current.m_body_state = m_target.m_body_state;
+	m_current.m_movement_type = m_target.m_movement_type;
 
-    VERIFY(m_target.cover());
+	VERIFY(m_target.cover());
 
-    smart_cover::loophole const& target_loophole = *m_target.cover_loophole();
-    smart_cover::loophole const& loophole =
-        target_loophole.enterable() ? target_loophole : nearest_enterable_loophole();
+	smart_cover::loophole const&		target_loophole = *m_target.cover_loophole();
+	smart_cover::loophole const&		loophole = target_loophole.enterable() ? target_loophole : nearest_enterable_loophole();
 
-    Fvector position;
-    m_target.cover()->object().XFORM().transform_tiny(position, current_transition().animation().position());
+	Fvector								position;
+	m_target.cover()->object().XFORM().transform_tiny(position, current_transition().animation().position());
 
-    u32 level_vertex_id = ai().level_graph().vertex(u32(-1), position);
-    if (!accessible(level_vertex_id) || !accessible(position))
-    {
-        if (!ai().level_graph().inside(level_vertex_id, position))
-            position = ai().level_graph().vertex_position(level_vertex_id);
-        else
-            position.y = ai().level_graph().vertex_plane_y(level_vertex_id, position.x, position.z);
+	u32									level_vertex_id = ai().level_graph().vertex(u32(-1), position);
+	if (!accessible(level_vertex_id) || !accessible(position)) {
+		if (!ai().level_graph().inside(level_vertex_id, position))
+			position = ai().level_graph().vertex_position(level_vertex_id);
+		else
+			position.y = ai().level_graph().vertex_plane_y(level_vertex_id, position.x, position.z);
 
-        if (!restrictions().accessible(position))
-        {
-            level_vertex_id = restrictions().accessible_nearest(Fvector().set(position), position);
-            VERIFY(restrictions().accessible(level_vertex_id));
-            VERIFY(restrictions().accessible(position));
-        }
-        else
-        {
-            if (!restrictions().accessible(level_vertex_id))
-            {
-                level_vertex_id =
-                    restrictions().accessible_nearest(ai().level_graph().vertex_position(level_vertex_id), position);
-                VERIFY(restrictions().accessible(level_vertex_id));
-                VERIFY(restrictions().accessible(position));
-            }
-        }
+		if (!restrictions().accessible(position)) {
+			level_vertex_id = restrictions().accessible_nearest(Fvector().set(position), position);
+			VERIFY(restrictions().accessible(level_vertex_id));
+			VERIFY(restrictions().accessible(position));
+		}
+		else {
+			if (!restrictions().accessible(level_vertex_id)) {
+				level_vertex_id = restrictions().accessible_nearest(ai().level_graph().vertex_position(level_vertex_id), position);
+				VERIFY(restrictions().accessible(level_vertex_id));
+				VERIFY(restrictions().accessible(position));
+			}
+		}
 
-        VERIFY(ai().level_graph().inside(level_vertex_id, position));
+		VERIFY(ai().level_graph().inside(level_vertex_id, position));
 
-        VERIFY2(restrictions().accessible(level_vertex_id) || show_restrictions(&restrictions()), *object().cName());
-        CMovementManager::set_level_dest_vertex(level_vertex_id);
+		VERIFY2(restrictions().accessible(level_vertex_id) || show_restrictions(&restrictions()), *object().cName());
+		CMovementManager::set_level_dest_vertex(level_vertex_id);
 
-        VERIFY2(restrictions().accessible(position) || show_restrictions(&restrictions()), *object().cName());
-        m_current.desired_position(&position);
-    }
-    else
-    {
-        CMovementManager::set_level_dest_vertex(level_vertex_id);
-        m_current.desired_position(&position);
-    }
+		VERIFY2(restrictions().accessible(position) || show_restrictions(&restrictions()), *object().cName());
+		m_current.desired_position(&position);
+	}
+	else {
+		CMovementManager::set_level_dest_vertex(level_vertex_id);
+		m_current.desired_position(&position);
+	}
 
-    Fvector direction = m_target.cover()->enter_direction(loophole);
-    m_current.desired_direction(&direction);
+	Fvector								direction = m_target.cover()->enter_direction(loophole);
+	m_current.desired_direction(&direction);
 
-    if (target_approached(m_apply_loophole_direction_distance))
-        object().sight().setup(CSightAction(SightManager::eSightTypeDirection, direction, true));
+	if (target_approached(m_apply_loophole_direction_distance))
+		object().sight().setup(CSightAction(SightManager::eSightTypeDirection, direction, true));
 
-    inherited::update(m_current);
+	inherited::update(m_current);
 
-    if (!path_completed())
-        return;
+	if (!path_completed())
+		return;
 
-    if (!object().sight().current_action().target_reached())
-        return;
+	if (!object().sight().current_action().target_reached())
+		return;
 
-    if (target_params().cover()->can_fire())
-    {
-        CInventoryItem const* const inventory_item = object().inventory().ActiveItem();
-        if (!inventory_item)
-        {
-            if (!object().CObjectHandler::goal_reached())
-                return;
+	if (target_params().cover()->is_combat_cover()) {
+		CInventoryItem const* const		inventory_item = object().inventory().ActiveItem();
+		if (!inventory_item) {
+			if (!object().CObjectHandler::goal_reached())
+				return;
 
-            object().set_goal(MonsterSpace::eObjectActionIdle, object().best_weapon());
-            return;
-        }
+			object().set_goal(MonsterSpace::eObjectActionIdle, object().best_weapon());
+			return;
+		}
 
-        if (inventory_item->BaseSlot() != INV_SLOT_3)
-        {
-            if (!object().CObjectHandler::goal_reached())
-                return;
+		if (inventory_item->BaseSlot() != INV_SLOT_3)
+		{
+			if (!object().CObjectHandler::goal_reached())
+				return;
 
-            object().set_goal(MonsterSpace::eObjectActionIdle, object().best_weapon());
-            return;
-        }
-    }
+			object().set_goal(MonsterSpace::eObjectActionIdle, object().best_weapon());
+			return;
+		}
+	}
 
-    object().animation().global().target_matrix(position, direction);
+	object().animation().global().target_matrix(position, direction);
 
-    if (!current_transition().animation().has_animation())
-    {
-        enter_smart_cover();
-        return;
-    }
+	if (!current_transition().animation().has_animation()) {
+		enter_smart_cover();
+		return;
+	}
 
-    object().sight().setup(CSightAction(SightManager::eSightTypeAnimationDirection, true, false));
+	object().sight().setup(CSightAction(SightManager::eSightTypeAnimationDirection, true, false));
 
-    on_smart_cover_enter();
+	on_smart_cover_enter();
 
-    m_entering_smart_cover_with_animation = true;
+	m_entering_smart_cover_with_animation = true;
 
-    m_enter_cover_id = m_target.cover_id();
-    m_enter_loophole_id = m_target.cover_loophole_id();
-    VERIFY(m_enter_cover_id != "");
-    VERIFY(m_enter_loophole_id != "");
+	m_enter_cover_id = m_target.cover_id();
+	m_enter_loophole_id = m_target.cover_loophole_id();
+	VERIFY(m_enter_cover_id != "");
+	VERIFY(m_enter_loophole_id != "");
 
-    m_enter_animation =
-        smart_cast<IKinematicsAnimated*>(object().Visual())->ID_Cycle(current_transition().animation().animation_id());
+	m_enter_animation = smart_cast<IKinematicsAnimated*>(object().Visual())->ID_Cycle(current_transition().animation().animation_id());
 
-    CStalkerAnimationManager& animation = object().animation();
+	CStalkerAnimationManager			&animation = object().animation();
 
-    animation.global_selector(
-        CStalkerAnimationManager::AnimationSelector(this, &stalker_movement_manager_smart_cover::select_animation));
-    animation.global_callback(
-        CStalkerAnimationManager::AnimationCallback(this, &stalker_movement_manager_smart_cover::on_animation_end));
+	animation.global_selector(CStalkerAnimationManager::AnimationSelector(this, &stalker_movement_manager_smart_cover::select_animation));
+	animation.global_callback(CStalkerAnimationManager::AnimationCallback(this, &stalker_movement_manager_smart_cover::on_animation_end));
 #ifdef DEBUG
-    animation.global_modifier(
-        CStalkerAnimationManager::AnimationModifier(this, &stalker_movement_manager_smart_cover::modify_animation));
+	animation.global_modifier(CStalkerAnimationManager::AnimationModifier(this, &stalker_movement_manager_smart_cover::modify_animation));
 #endif // #ifdef DEBUG
 }
+//morrey 
 
 void stalker_movement_manager_smart_cover::enter_smart_cover(u32 const& time_delta)
 {

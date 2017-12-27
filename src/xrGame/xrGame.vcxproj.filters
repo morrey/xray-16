@@ -2287,6 +2287,9 @@
     <Filter Include="Core\Server\QR2 callbacks">
       <UniqueIdentifier>{0e29aa42-d79c-425a-994b-c18169f076de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\Common\PDA\FractionWar">
+      <UniqueIdentifier>{49c6af0a-ea09-4212-bc7f-7cbcca7c5810}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mt_config.h">
@@ -6651,6 +6654,18 @@
     <ClInclude Include="..\Externals\GameSpy\src\GameSpy\md5.h">
       <Filter>Core\Client\Level\ClientDigestComputer</Filter>
     </ClInclude>
+    <ClInclude Include="ui\UIFactionWarWnd.h">
+      <Filter>UI\Common\PDA\FractionWar</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\FractionState.h">
+      <Filter>UI\Common\PDA\FractionWar</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\FactionState.h">
+      <Filter>UI\Common\PDA\FractionWar</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\UIWarState.h">
+      <Filter>UI\Common\PDA\FractionWar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="damage_manager.cpp">
@@ -10159,6 +10174,18 @@
     </ClCompile>
     <ClCompile Include="..\Externals\GameSpy\src\GameSpy\md5c.c">
       <Filter>Core\Client\Level\ClientDigestComputer</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\UIFactionWarWnd.cpp">
+      <Filter>UI\Common\PDA\FractionWar</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\FactionState.cpp">
+      <Filter>UI\Common\PDA\FractionWar</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\FractionState.cpp">
+      <Filter>UI\Common\PDA\FractionWar</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\UIWarState.cpp">
+      <Filter>UI\Common\PDA\FractionWar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
