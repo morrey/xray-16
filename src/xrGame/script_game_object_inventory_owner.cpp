@@ -591,7 +591,13 @@ void CScriptGameObject::SetCommunityGoodwill_obj(LPCSTR community, int goodwill)
 int CScriptGameObject::GetAttitude(CScriptGameObject* pToWho)
 {
     CInventoryOwner* pInventoryOwner = smart_cast<CInventoryOwner*>(&object());
-    VERIFY(pInventoryOwner);
+    //VERIFY(pInventoryOwner);
+	if (!pInventoryOwner)
+	{
+		ai().script_engine().script_log(
+			LuaMessageType::Error, "GetAttitude available only for InventoryOwner");
+		return 0;
+	}
     CInventoryOwner* pOthersInventoryOwner = smart_cast<CInventoryOwner*>(&pToWho->object());
     VERIFY(pOthersInventoryOwner);
     return RELATION_REGISTRY().GetAttitude(pInventoryOwner, pOthersInventoryOwner);
